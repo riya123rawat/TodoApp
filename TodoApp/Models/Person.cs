@@ -1,54 +1,28 @@
-﻿namespace TodoApp.Models
-{
+﻿using System.ComponentModel.DataAnnotations;
 
+namespace TodoApp.Models
+{
     public class Person
     {
-        private readonly int id;
-        private string firstName;
-        private string lastName;
+        public int Id { get; set; }
 
-        //Constructor
+        [Required]
+        public string FirstName { get; set; } = string.Empty;
+
+        [Required]
+        public string LastName { get; set; } = string.Empty;
+
+        public ICollection<Todo> Todos { get; set; } = new List<Todo>();
+
+        // Parameterless constructor for EF Core
+        public Person() { }
+
+        // Constructor with parameters for manual use
         public Person(int id, string firstName, string lastName)
         {
-            this.id = id;
-            this.firstName = firstName;
-            this.lastName = lastName;
+            Id = id;
+            FirstName = firstName;
+            LastName = lastName;
         }
-
-        // public properties to access private field while getting and setting
-
-        public int Id => this.id;
-
-        public string FirstName
-        {
-            get { return firstName; }
-            set
-            {
-                if (string.IsNullOrWhiteSpace(value))
-                {
-                    throw new ArgumentException("FirstName cannot be null or empty.");
-                }
-                else
-                    firstName = value;
-
-            }
-
-        }
-        public string LastName
-        {
-            get { return lastName; }
-            set
-            {
-                if (string.IsNullOrWhiteSpace(value))
-                {
-                    throw new ArgumentException("LastName cannot be null or empty.");
-                }
-                else
-                    lastName = value;
-
-            }
-
-        }
-
     }
 }

@@ -2,51 +2,34 @@
 using TodoApp.Data;
 using TodoApp.Models;
 
-namespace Console_Core_Project.Data
+namespace TodoApp.Data
 {
-}
-public class PeopleService
-{
-    private readonly PersonDbContext _context;
-    public PeopleService(PersonDbContext context)
+
+    public class PeopleService
     {
-        _context = context;
-    }
-    private static Person[] personArray = new Person[0];
-    //add method
-    public int Size() => personArray.Length;
-
-    public Person[] FindAll() => personArray;
-
-    public Person FindById(int personId) => personArray.FirstOrDefault(person => person.Id == personId);
-
-    public Person CreatePerson(string firstName, string lastName)
-    {
-        int newId = PersonSequencer.NextPersonId();
-        Person newPerson = new Person(newId, firstName, lastName);
-        Array.Resize(ref personArray, personArray.Length + 1);
-        personArray[personArray.Length - 1] = newPerson;
-        return newPerson;
-    }
-
-    public void Clear() => personArray = new Person[0];
-
-    public void RemovePerson(int personId)
-    {
-        int index = Array.FindIndex(personArray, p => p.Id == personId);
-        if (index >= 0)
+        private readonly ApplicationDbContext _context;
+        public PeopleService(ApplicationDbContext context)
         {
-            Person[] newArray = new Person[personArray.Length - 1];
-            if (index > 0)
-            {
-                Array.Copy(personArray, 0, newArray, 0, index);
-            }
-            if (index < personArray.Length - 1)
-            {
-                Array.Copy(personArray, index + 1, newArray, index, personArray.Length - index - 1);
-            }
-            personArray = newArray;
+            _context = context;
         }
-    }
+        private static Person[] _people = new Person[0];
 
+        public int Size() => _people.Length;
+
+        public Person[] FindAll() => _people;
+
+        public Person? FindById(int personId) =>
+            _people.FirstOrDefault(p => p.Id == personId);
+
+        public Person CreatePerson(string firstName, string lastName)
+        {
+            int newId = PersonSequencer.NextPersonId();
+            Person newPerson = new Person(newId, firstName, lastName);
+            Array.Resize(ref _people, _people.Length + 1);
+            _people[^1] = newPerson;
+            return newPerson;
+        }
+
+        public void Clear() => _people = new Person[0];
+    }
 }
